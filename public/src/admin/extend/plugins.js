@@ -66,7 +66,7 @@ define('admin/extend/plugins', [
 			}
 
 			function toggleActivate() {
-				socket.emit('admin.plugins.toggleActive', pluginID, errStatus(err, status));
+				socket.emit('admin.plugins.toggleActive', pluginID, errStatus());
 			}
 
 			if (pluginData.license && pluginData.active !== true) {
