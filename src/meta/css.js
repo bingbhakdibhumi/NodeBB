@@ -218,6 +218,8 @@ async function getBundleMetadata(target) {
 		}
 	}
 
+    console.log("AHHHHH");
+
 	let themeData = null;
 	if (target === 'client') {
 		themeData = await db.getObjectFields('config', ['theme:type', 'theme:id', 'useBSVariables', 'bsVariables']);
