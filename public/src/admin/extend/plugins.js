@@ -36,36 +36,38 @@ define('admin/extend/plugins', [
 
 			const pluginData = ajaxify.data.installed[pluginEl.attr('data-plugin-index')];
 
+            function errStatus(err, status) {
+                if (err) {
+                    return alerts.error(err);
+                }
+                btn.siblings('[data-action="toggleActive"]').removeClass('hidden');
+                btn.addClass('hidden');
+
+                // clone it to active plugins tab
+                if (status.active && !$('#active [id="' + pluginID + '"]').length) {
+                    $('#active ul').prepend(pluginEl.clone(true));
+                }
+
+                // Toggle active state in template data
+                pluginData.active = !pluginData.active;
+
+                alerts.alert({
+                    alert_id: 'plugin_toggled',
+                    title: '[[admin/extend/plugins:alert.' + (status.active ? 'enabled' : 'disabled') + ']]',
+                    message: '[[admin/extend/plugins:alert.' + (status.active ? 'activate-success' : 'deactivate-success') + ']]',
+                    type: status.active ? 'warning' : 'success',
+                    timeout: 5000,
+                    clickfn: function () {
+                        require(['admin/modules/instance'], function (instance) {
+                            instance.rebuildAndRestart();
+                        });
+                    },
+                });
+            }
+
 			function toggleActivate() {
-				socket.emit('admin.plugins.toggleActive', pluginID, function (err, status) {
-					if (err) {
-						return alerts.error(err);
-					}
-					btn.siblings('[data-action="toggleActive"]').removeClass('hidden');
-					btn.addClass('hidden');
-
-					// clone it to active plugins tab
-					if (status.active && !$('#active [id="' + pluginID + '"]').length) {
-						$('#active ul').prepend(pluginEl.clone(true));
-					}
-
-					// Toggle active state in template data
-					pluginData.active = !pluginData.active;
-
-					alerts.alert({
-						alert_id: 'plugin_toggled',
-						title: '[[admin/extend/plugins:alert.' + (status.active ? 'enabled' : 'disabled') + ']]',
-						message: '[[admin/extend/plugins:alert.' + (status.active ? 'activate-success' : 'deactivate-success') + ']]',
-						type: status.active ? 'warning' : 'success',
-						timeout: 5000,
-						clickfn: function () {
-							require(['admin/modules/instance'], function (instance) {
-								instance.rebuildAndRestart();
-							});
-						},
-					});
-				});
-			}
+				socket.emit('admin.plugins.toggleActive', pluginID, errStatus(err, status));
+            }
 
 			if (pluginData.license && pluginData.active !== true) {
 				Benchpress.render('admin/partials/plugins/license', pluginData).then(function (html) {
