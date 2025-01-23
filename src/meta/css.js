@@ -228,7 +228,7 @@ async function getBundleMetadata(target) {
 		);
 		paths.unshift(baseThemePath);
 		paths.unshift(`${baseThemePath}/node_modules`);
-		themeData.bsVariables = parseInt(themeData.useBSVariables, 10) === 1 ? (themeData.bsVariables || '') : '';
+		themeData.bsVariables = parseInt(themeData.useBSVariables, 10) === 1 ? (themeData.bsVariables) : '';
 		themeData.bootswatchSkin = skin;
 		themeData.isCustomSkin = isCustomSkin;
 		const customSkin = isCustomSkin ? await CSS.getCustomSkin(skin) : null;
