@@ -218,7 +218,7 @@ async function getBundleMetadata(target) {
 		}
 	}
 
-    console.log("AHHHHH");
+    // console.log("AHHHHH");
 
 	let themeData = null;
 	if (target === 'client') {
@@ -230,6 +230,8 @@ async function getBundleMetadata(target) {
 		);
 		paths.unshift(baseThemePath);
 		paths.unshift(`${baseThemePath}/node_modules`);
+
+        console.log("BING BHAKDIBHUMI");
 		themeData.bsVariables = parseInt(themeData.useBSVariables, 10) === 1 ? (themeData.bsVariables) : '';
 		themeData.bootswatchSkin = skin;
 		themeData.isCustomSkin = isCustomSkin;
